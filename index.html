@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airport Map</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css" rel="stylesheet">
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; }
+    </style>
+</head>
+<body>
+    <div id="map" style="width: 100vw; height: 100vh;"></div>
+    <script>
+        mapboxgl.accessToken = 'pk.eyJ1IjoibWFzYWlzaGkiLCJhIjoiY2xseXh1dGF6MWV4ejNkcGptcG1hMjN1ZSJ9.A9iCJcHG9uF-hkljOBNWAQ';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/dark-v11',
+            center: [-101.299591, 41.116386],
+            zoom: 4
+        });
+
+        map.on('load', function() {
+            map.addSource('airports', {
+                'type': 'geojson',
+                'data': './data/airport_code_quadkey.geojson'
+            });
+
+            map.addLayer({
+                'id': 'airport-circles',
+                'type': 'circle',
+                'source': 'airports',
+                'paint': {
+                    'circle-radius': [
+                        'interpolate',
+                        ['linear'],
+                        ['to-number', ['get', 'elevation_ft']],
+                        0, 1.2,
+                        1000, 1.5,
+                        5000, 2.5,
+                    ],
+                    'circle-color': [
+                        'match',
+                        ['get', 'type_'],
+                        'heliport', '#ff6666',
+                        'small_airport', '#66ff66',
+                        'medium_airport', '#6666ff',
+                        'large_airport', '#ffff66',
+                        'seaplane_base', '#66ffff',
+                        'balloonport', '#ff66ff',
+                        'closed', '#aaaaaa',
+                        '#000000'
+                    ],
+                    'circle-opacity': 0.7,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': [
+                        'match',
+                        ['get', 'type_'],
+                        'heliport', '#ff9999',
+                        'small_airport', '#99ff99',
+                        'medium_airport', '#9999ff',
+                        'large_airport', '#ffff99',
+                        'seaplane_base', '#99ffff',
+                        'balloonport', '#ff99ff',
+                        'closed', '#cccccc',
+                        '#000000'
+                    ]
+                }
+            });
+        });
+    </script>
+</body>
+</html>
