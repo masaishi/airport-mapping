@@ -23,4 +23,4 @@ Additionally, I used Mapbox to display the created GeoJSON.
 
 [Map](https://masaishi.github.io/airport-mapping/)
 
-![Map](https://github.com/masaishi/airport-mapping/blob/master/images/map.png)
+![Map](https://github.com/masaishi/airport-mapping/blob/main/images/map.png)
